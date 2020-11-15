@@ -16,8 +16,8 @@ class RoomsPagesWidget extends StatelessWidget {
           itemCount: pageProvider.pages.length,
           physics: NeverScrollableScrollPhysics(),
           scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            final List<ModulesModel> model = pageProvider.pages[index].modules;
+          itemBuilder: (context, i) {
+            final List<ModulesModel> model = pageProvider.pages[i].modules;
             return GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -33,7 +33,7 @@ class RoomsPagesWidget extends StatelessWidget {
               // shrinkWrap: true,
               itemBuilder: (context, index) {
                 ModulesModel module = model[index];
-                bool isOn = module.isOn;
+                bool isOn = !module.isOn;
                 return Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -64,10 +64,19 @@ class RoomsPagesWidget extends StatelessWidget {
                             child: Switch(
                               materialTapTargetSize:
                                   MaterialTapTargetSize.shrinkWrap,
-                              onChanged: (value) {},
+                              onChanged: (value) {
+                                print(value);
+                                print(
+                                    pageProvider.pages[i].modules[index].isOn);
+                                pageProvider.toggleLed(
+                                  index,
+                                  i,
+                                  state: value,
+                                );
+                              },
                               activeColor: boxGrad.colors[0],
                               activeTrackColor: boxGrad.colors[1],
-                              value: isOn,
+                              value: !pageProvider.pages[i].modules[index].isOn,
                             ),
                           ),
                         ],
@@ -86,7 +95,7 @@ class RoomsPagesWidget extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            module.subTitle,
+                            isOn ? "OPENED" : "CLOSED",
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 10,

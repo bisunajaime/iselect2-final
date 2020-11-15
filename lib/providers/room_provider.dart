@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:embesys_ctrl/constants.dart';
 import 'package:embesys_ctrl/models/page_model.dart';
 import 'package:embesys_ctrl/providers/base_provider.dart';
@@ -26,5 +28,29 @@ class RoomProvider extends BaseProvider {
     });
     _pages[index].isSelected = true;
     notifyListeners();
+  }
+
+  Future toggleLed(int index, int i, {bool state = true}) async {
+    String val;
+    if (state) {
+      val = "ON";
+    } else {
+      val = "OFF";
+    }
+    Map res = await networkRepository.toggleLed(_pages[i].modules[index].route,
+        state: val);
+    log(res.toString());
+    switch (res['type']) {
+      case 'success':
+        if (val == "ON")
+          _pages[i].modules[index].isOn = false;
+        else
+          _pages[i].modules[index].isOn = true;
+        notifyListeners();
+        print('success');
+        break;
+      default:
+        log('There was a problem: ${res['type']}');
+    }
   }
 }

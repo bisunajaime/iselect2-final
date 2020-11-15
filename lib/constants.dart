@@ -27,16 +27,18 @@ final LinearGradient boxGrad = LinearGradient(
 
 final List<ModulesModel> livingRoom = [
   ModulesModel(
-    icon: Icons.router,
+    icon: Icons.lightbulb_outline,
     isOn: true,
     title: 'Light',
     subTitle: 'OPENED',
+    route: '/LED_LIVING=',
   ),
   ModulesModel(
-    icon: Icons.lightbulb_outline,
-    isOn: false,
-    title: 'Light',
+    icon: Icons.ac_unit,
+    isOn: true,
+    title: 'Thermostat',
     subTitle: 'CLOSED',
+    route: '/',
   ),
 ];
 
@@ -71,12 +73,12 @@ final List<ModulesModel> familyRoom = [
 ];
 
 final List<ModulesModel> entertainmentRoom = [
-  ModulesModel(
-    icon: Icons.router,
-    isOn: true,
-    title: 'Router',
-    subTitle: 'OPENED',
-  ),
+  // ModulesModel(
+  //   icon: Icons.router,
+  //   isOn: true,
+  //   title: 'Router',
+  //   subTitle: 'OPENED',
+  // ),
   ModulesModel(
     icon: Icons.surround_sound,
     isOn: false,
@@ -84,11 +86,11 @@ final List<ModulesModel> entertainmentRoom = [
     subTitle: 'CLOSED',
   ),
   ModulesModel(
-    icon: Icons.lightbulb_outline,
-    isOn: false,
-    title: 'Light',
-    subTitle: 'CLOSED',
-  ),
+      icon: Icons.lightbulb_outline,
+      isOn: false,
+      title: 'Light',
+      subTitle: 'CLOSED',
+      route: '/LED_ENTERTAINMENT='),
 ];
 
 final List<Map> sampleData = [
