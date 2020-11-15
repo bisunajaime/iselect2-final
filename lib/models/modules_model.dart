@@ -6,6 +6,7 @@ class ModulesModel {
   String title;
   String subTitle;
   String route;
+  String key;
 
   ModulesModel({
     this.icon,
@@ -13,5 +14,6 @@ class ModulesModel {
     this.title,
     this.subTitle,
     this.route = "/",
+    this.key = "",
   });
 }

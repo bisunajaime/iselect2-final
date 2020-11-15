@@ -53,4 +53,28 @@ class RoomProvider extends BaseProvider {
         log('There was a problem: ${res['type']}');
     }
   }
+
+  Future toggleSocketLed(int index, int i, {bool state = true}) async {
+    String val;
+    if (state) {
+      val = "ON";
+    } else {
+      val = "OFF";
+    }
+    String key = _pages[i].modules[index].key;
+    Map res = await networkRepository.socketLed({key: state ? 1 : 0});
+    log(res.toString());
+    switch (res['type']) {
+      case 'success':
+        if (val == "ON")
+          _pages[i].modules[index].isOn = false;
+        else
+          _pages[i].modules[index].isOn = true;
+        notifyListeners();
+        print('success');
+        break;
+      default:
+        log('There was a problem: ${res['type']}');
+    }
+  }
 }

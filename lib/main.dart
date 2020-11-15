@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:embesys_ctrl/constants.dart';
 import 'package:embesys_ctrl/pages/home_page.dart';
 import 'package:embesys_ctrl/providers/room_provider.dart';
@@ -5,6 +8,8 @@ import 'package:embesys_ctrl/providers/weather_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/status.dart' as status;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -115,7 +120,11 @@ class MyHomePage extends StatelessWidget {
                     color: boxGrad.colors[1],
                   ),
                 ),
-              )
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              // TestWebSocket(),
             ],
           ),
         ),
@@ -123,3 +132,126 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
+
+// class TestWebSocket extends StatefulWidget {
+//   @override
+//   _TestWebSocketState createState() => _TestWebSocketState();
+// }
+
+// class _TestWebSocketState extends State<TestWebSocket> {
+//   IOWebSocketChannel channel;
+
+//   void connectToSocket() async {
+//     channel = IOWebSocketChannel.connect("ws://192.168.254.117:81/");
+//     channel.stream.listen((message) {
+//       // channel.sink.add("received!");
+//       print(message);
+//       // channel.sink.close(status.goingAway);
+//     });
+//   }
+
+//   void sendData() async {
+//     int r = Random().nextInt(2);
+
+//     int d = Random().nextInt(2);
+//     print(r);
+//     try {
+//       channel.sink.add(jsonEncode({
+//         "LED1": r,
+//         "LED2": d,
+//       }));
+//     } catch (e) {
+//       print(e.toString());
+//     }
+//   }
+
+//   @override
+//   void initState() {
+//     connectToSocket();
+//     super.initState();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 32),
+//           child: SizedBox(
+//             width: double.infinity,
+//             height: 45,
+//             child: FlatButton(
+//               onPressed: () async {
+//                 connectToSocket();
+//                 // sendData();
+//               },
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(5),
+//               ),
+//               child: Text(
+//                 'Reconnect',
+//                 style: TextStyle(
+//                   fontWeight: FontWeight.w500,
+//                   fontSize: 14,
+//                   color: Colors.white,
+//                 ),
+//               ),
+//               color: boxGrad.colors[1],
+//             ),
+//           ),
+//         ),
+//         Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 32),
+//           child: SizedBox(
+//             width: double.infinity,
+//             height: 45,
+//             child: FlatButton(
+//               onPressed: () async {
+//                 // connectToSocket();
+//                 sendData();
+//               },
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(5),
+//               ),
+//               child: Text(
+//                 'Test WebSocket',
+//                 style: TextStyle(
+//                   fontWeight: FontWeight.w500,
+//                   fontSize: 14,
+//                   color: Colors.white,
+//                 ),
+//               ),
+//               color: boxGrad.colors[1],
+//             ),
+//           ),
+//         ),
+//         Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 32),
+//           child: SizedBox(
+//             width: double.infinity,
+//             height: 45,
+//             child: FlatButton(
+//               onPressed: () async {
+//                 // connectToSocket();
+//                 // sendData();
+//                 channel.sink.close();
+//               },
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(5),
+//               ),
+//               child: Text(
+//                 'Close WebSocket',
+//                 style: TextStyle(
+//                   fontWeight: FontWeight.w500,
+//                   fontSize: 14,
+//                   color: Colors.white,
+//                 ),
+//               ),
+//               color: boxGrad.colors[1],
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

@@ -65,6 +65,19 @@ class RoomsPagesWidget extends StatelessWidget {
                               materialTapTargetSize:
                                   MaterialTapTargetSize.shrinkWrap,
                               onChanged: (value) {
+                                if (pageProvider.pages[i].modules[index].key
+                                        .trim()
+                                        .length !=
+                                    0) {
+                                  print(
+                                      pageProvider.pages[i].modules[index].key);
+                                  pageProvider.toggleSocketLed(
+                                    index,
+                                    i,
+                                    state: value,
+                                  );
+                                  return;
+                                }
                                 print(value);
                                 print(
                                     pageProvider.pages[i].modules[index].isOn);

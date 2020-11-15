@@ -32,6 +32,7 @@ final List<ModulesModel> livingRoom = [
     title: 'Light',
     subTitle: 'OPENED',
     route: '/LED_LIVING=',
+    key: "LED_LIVING",
   ),
   ModulesModel(
     icon: Icons.ac_unit,
@@ -86,11 +87,13 @@ final List<ModulesModel> entertainmentRoom = [
     subTitle: 'CLOSED',
   ),
   ModulesModel(
-      icon: Icons.lightbulb_outline,
-      isOn: false,
-      title: 'Light',
-      subTitle: 'CLOSED',
-      route: '/LED_ENTERTAINMENT='),
+    icon: Icons.lightbulb_outline,
+    isOn: true,
+    title: 'Light',
+    subTitle: 'CLOSED',
+    route: '/LED_ENTERTAINMENT=',
+    key: "LED_ENTERTAINMENT",
+  ),
 ];
 
 final List<Map> sampleData = [

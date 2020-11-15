@@ -77,32 +77,34 @@ class _WeatherWidgetState extends State<WeatherWidget> {
                       SizedBox(
                         width: 10,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            DateFormat.yMMMd().add_jm().format(
-                                  DateTime.parse(
-                                      weatherProvider.model.location.localtime),
-                                ),
-                            style: TextStyle(
-                              fontSize: 12,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 5,
                             ),
-                          ),
-                          Text(
-                            weatherProvider
-                                .model.current.weatherDescriptions.first,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 32,
+                            Text(
+                              DateFormat.yMMMd().add_jm().format(
+                                    DateTime.parse(weatherProvider
+                                        .model.location.localtime),
+                                  ),
+                              style: TextStyle(
+                                fontSize: 12,
+                              ),
                             ),
-                          ),
-                        ],
+                            Text(
+                              weatherProvider
+                                  .model.current.weatherDescriptions.first,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 32,
+                              ),
+                            ),
+                          ],
+                        ),
                       )
                     ],
                   ),
