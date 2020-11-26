@@ -14,22 +14,22 @@ class HomePage extends StatelessWidget {
     final weatherProvider = Provider.of<WeatherProvider>(context);
     return Scaffold(
       backgroundColor: scaffoldBgColor,
-      floatingActionButton: FloatingActionButton.extended(
-        label: Text(
-          'Add a category',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 10,
-            letterSpacing: 1.0,
-          ),
-        ),
-        icon: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-        onPressed: () {},
-        backgroundColor: boxGrad.colors[1],
-      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   label: Text(
+      //     'Add a category',
+      //     style: TextStyle(
+      //       fontWeight: FontWeight.bold,
+      //       fontSize: 10,
+      //       letterSpacing: 1.0,
+      //     ),
+      //   ),
+      //   icon: Icon(
+      //     Icons.add,
+      //     color: Colors.white,
+      //   ),
+      //   onPressed: () {},
+      //   backgroundColor: boxGrad.colors[1],
+      // ),
       body: RefreshIndicator(
         onRefresh: () async {
           await weatherProvider.loadWeather();
