@@ -19,7 +19,7 @@ final LinearGradient gradient = LinearGradient(
 final LinearGradient boxGrad = LinearGradient(
   colors: [
     Color(0xff00B2FF),
-    Color(0xff0066FF),
+    Color(0xff0057FF),
   ],
   begin: Alignment.topLeft,
   end: Alignment.bottomCenter,

@@ -10,10 +10,10 @@ class SoundWidget extends StatelessWidget {
       ),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(15),
         gradient: boxGrad,
       ),
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -52,15 +52,7 @@ class SoundWidget extends StatelessWidget {
           Row(
             children: [
               Icon(
-                Icons.fast_rewind,
-                color: Colors.white,
-                size: 20,
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Icon(
-                Icons.play_circle_outline,
+                Icons.skip_previous,
                 color: Colors.white,
                 size: 25,
               ),
@@ -68,9 +60,17 @@ class SoundWidget extends StatelessWidget {
                 width: 5,
               ),
               Icon(
-                Icons.fast_forward,
+                Icons.play_circle_filled,
                 color: Colors.white,
-                size: 20,
+                size: 35,
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Icon(
+                Icons.skip_next,
+                color: Colors.white,
+                size: 25,
               ),
             ],
           ),
@@ -99,7 +99,7 @@ class _SongImageAnimatedState extends State<SongImageAnimated>
       ..addListener(() {
         setState(() {});
       });
-    controller.repeat(reverse: true);
+    // controller.repeat(reverse: true);
     // if (animation.isCompleted) {
     //   controller.reverse();
     // } else {
