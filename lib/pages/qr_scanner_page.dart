@@ -1,8 +1,49 @@
+import 'dart:developer';
+
 import 'package:embesys_ctrl/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_qr_reader/flutter_qr_reader.dart';
+import 'package:flutter_qr_reader/qrcode_reader_view.dart';
 
-class QrScannerPage extends StatelessWidget {
+class QrScannerPage extends StatefulWidget {
+  @override
+  _QrScannerPageState createState() => _QrScannerPageState();
+}
+
+class _QrScannerPageState extends State<QrScannerPage> {
+  QrReaderViewController _controller;
+  String data = "";
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void onScan(String v, List<Offset> offsets) {
+    print([v, offsets]);
+    _controller.stopCamera();
+    setState(() {
+      data = v;
+    });
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Scanned'),
+          content: Text(data),
+          actions: [
+            FlatButton(
+              child: Text('Dismiss'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,15 +78,35 @@ class QrScannerPage extends StatelessWidget {
                   ],
                 ),
                 child: Center(
-                  child: QrReaderView(
-                    height: 250,
-                    width: 250,
-                    callback: (QrReaderViewController val) {
-                      print(val.id);
-                    },
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      child: QrReaderView(
+                        height: 280,
+                        width: 280,
+                        callback: (QrReaderViewController val) {
+                          setState(() {
+                            _controller = val;
+                          });
+                          _controller.startCamera(onScan);
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ),
+              SizedBox(
+                height: 24,
+              ),
+              GestureDetector(
+                  onTap: () {
+                    assert(_controller != null);
+                    _controller.startCamera(onScan);
+                  },
+                  child: Text(
+                    'Tap here to scan again.',
+                  )),
               SizedBox(
                 height: 24,
               ),
