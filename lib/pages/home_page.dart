@@ -1,10 +1,13 @@
 import 'package:embesys_ctrl/constants.dart';
 import 'package:embesys_ctrl/pages/other_devices_page.dart';
+import 'package:embesys_ctrl/pages/temperature_reading_page.dart';
 import 'package:embesys_ctrl/providers/weather_provider.dart';
 import 'package:embesys_ctrl/widgets/device_notifications_widget.dart';
+import 'package:embesys_ctrl/widgets/other_devices_buttons_widget.dart';
 import 'package:embesys_ctrl/widgets/page_list_widget.dart';
 import 'package:embesys_ctrl/widgets/rooms_pages_widget.dart';
 import 'package:embesys_ctrl/widgets/sound_widget.dart';
+import 'package:embesys_ctrl/widgets/temperature_reading_widget.dart';
 import 'package:embesys_ctrl/widgets/weather_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -37,6 +40,7 @@ class HomePage extends StatelessWidget {
           await weatherProvider.loadWeather();
         },
         child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -88,58 +92,22 @@ class HomePage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                   horizontal: 18,
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: SizedBox(
-                        height: 50,
-                        child: FlatButton(
-                          color: boxGrad.colors[1],
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => OtherDevicesPage(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            'Other Devices',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: FlatButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: EdgeInsets.zero,
-                        color: Colors.white,
-                        child: Icon(
-                          Icons.code,
-                          color: Colors.black,
-                        ),
-                        onPressed: () {},
-                      ),
-                    )
-                  ],
+                child: Text(
+                  'Temperature Reading',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
+              SizedBox(
+                height: 24,
+              ),
+              TemperatureReadingWidget(),
+              SizedBox(
+                height: 24,
+              ),
+              OtherDevicesButtonsWidget(),
               SizedBox(
                 height: 24,
               ),

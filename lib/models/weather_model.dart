@@ -50,8 +50,8 @@ class Current {
   int windSpeed;
   int windDegree;
   String windDir;
-  int pressure;
-  int precip;
+  double pressure;
+  double precip;
   int humidity;
   int cloudcover;
   int feelslike;
@@ -69,8 +69,8 @@ class Current {
         windSpeed: json["wind_speed"],
         windDegree: json["wind_degree"],
         windDir: json["wind_dir"],
-        pressure: json["pressure"],
-        precip: json["precip"],
+        pressure: double.parse(json["pressure"].toString()),
+        precip: double.parse(json["precip"].toString()),
         humidity: json["humidity"],
         cloudcover: json["cloudcover"],
         feelslike: json["feelslike"],
