@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:embesys_ctrl/constants.dart';
+import 'package:embesys_ctrl/models/device_model.dart';
+import 'package:embesys_ctrl/pages/device_details_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_qr_reader/flutter_qr_reader.dart';
-import 'package:flutter_qr_reader/qrcode_reader_view.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class QrScannerPage extends StatefulWidget {
   @override
@@ -11,37 +13,12 @@ class QrScannerPage extends StatefulWidget {
 }
 
 class _QrScannerPageState extends State<QrScannerPage> {
-  QrReaderViewController _controller;
-  String data = "";
+  String data;
+  DeviceModel _model;
 
   @override
   void initState() {
     super.initState();
-  }
-
-  void onScan(String v, List<Offset> offsets) {
-    print([v, offsets]);
-    _controller.stopCamera();
-    setState(() {
-      data = v;
-    });
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Scanned'),
-          content: Text(data),
-          actions: [
-            FlatButton(
-              child: Text('Dismiss'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -52,19 +29,9 @@ class _QrScannerPageState extends State<QrScannerPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Text(
-                'Scan QR Code to \nadd a Device',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-              SizedBox(
-                height: 24,
-              ),
               Container(
-                height: 280,
+                height: 150,
+                width: 150,
                 margin: EdgeInsets.symmetric(horizontal: 40),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -80,76 +47,136 @@ class _QrScannerPageState extends State<QrScannerPage> {
                 child: Center(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(25),
-                      child: QrReaderView(
-                        height: 280,
-                        width: 280,
-                        callback: (QrReaderViewController val) {
-                          setState(() {
-                            _controller = val;
-                          });
-                          _controller.startCamera(onScan);
-                        },
-                      ),
+                    child: Image.asset(
+                      'assets/images/qr.png',
+                      scale: 12,
                     ),
                   ),
                 ),
               ),
               SizedBox(
-                height: 24,
+                height: 16,
               ),
-              GestureDetector(
-                  onTap: () {
-                    assert(_controller != null);
-                    _controller.startCamera(onScan);
-                  },
-                  child: Text(
-                    'Tap here to scan again.',
-                  )),
-              SizedBox(
-                height: 24,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Text(
-                  'Button will be enabled once device has\nbeen recognized',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.black.withOpacity(.5),
-                    fontWeight: FontWeight.w400,
-                  ),
+              Text(
+                'Scan QR Code to \nadd a Device',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
                 ),
               ),
               SizedBox(
-                height: 24,
+                height: 16,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 48),
                 child: SizedBox(
-                  height: 60,
+                  height: 50,
                   width: double.infinity,
                   child: FlatButton(
-                    child: Text(
-                      'Save device',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: data == null
+                        ? Icon(
+                            Icons.camera_alt,
+                            color: Colors.white,
+                          )
+                        : Text(
+                            'Tap here to scan ${data != null ? 'again' : ''}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    color: boxGrad.colors[1].withOpacity(.5),
-                    onPressed: () {},
+                    color: boxGrad.colors[1],
+                    onPressed: () async {
+                      final result = await FlutterBarcodeScanner.scanBarcode(
+                        '#ff6666',
+                        'Dismiss',
+                        true,
+                        ScanMode.QR,
+                      );
+                      print(result);
+                      DeviceModel model;
+                      try {
+                        var res = jsonDecode(result);
+                        model = DeviceModel.fromJson(res);
+                        log(model.type);
+                        log(model.deviceName);
+                        log(model.deviceTag);
+                      } catch (e) {
+                        setState(() {
+                          data = null;
+                        });
+                        log(e.toString());
+                        return;
+                      }
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator(),
+                              Text('Loading'),
+                            ],
+                          ),
+                        ),
+                      );
+                      await Future.delayed(Duration(seconds: 1));
+                      Navigator.pop(context);
+                      setState(() {
+                        data = result;
+                        _model = model;
+                      });
+                    },
                   ),
                 ),
               ),
               SizedBox(
-                height: 24,
+                height: 8,
               ),
+              if (data != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 48),
+                  child: SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: FlatButton(
+                      child: Text(
+                        'Save device',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      disabledColor: boxGrad.colors[1].withOpacity(.5),
+                      color: boxGrad.colors[1],
+                      onPressed: data != null
+                          ? () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DeviceDetailsPage(
+                                      model: _model,
+                                    ),
+                                  ));
+                            }
+                          : null,
+                    ),
+                  ),
+                ),
+              if (data != null)
+                SizedBox(
+                  height: 24,
+                ),
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
