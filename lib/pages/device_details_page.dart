@@ -40,11 +40,16 @@ class DeviceDetailsPage extends StatelessWidget {
             ),
             child: Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: boxGrad.colors[1],
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: boxGrad.colors[1],
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -116,7 +121,86 @@ class DeviceDetailsPage extends StatelessWidget {
                   model.deviceName,
                   style: details,
                 ),
+                SizedBox(height: 8),
+                Text(
+                  'Set a label for your device',
+                  style: label,
+                ),
+                Text(
+                  'Enter label below',
+                  style: details,
+                ),
+                SizedBox(height: 4),
+                TextField(
+                  textAlignVertical: TextAlignVertical.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    hintText: 'Type here...',
+                    filled: true,
+                    fillColor: Colors.black.withOpacity(.05),
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Set a category for this device',
+                  style: label,
+                ),
+                Text(
+                  'Select category',
+                  style: details,
+                ),
+                SizedBox(height: 4),
+                TextField(
+                  textAlignVertical: TextAlignVertical.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    hintText: 'Type here...',
+                    filled: true,
+                    fillColor: Colors.black.withOpacity(.05),
+                  ),
+                ),
+                SizedBox(height: 8),
               ],
+            ),
+          ),
+          SizedBox(
+            height: 60,
+            width: double.infinity,
+            child: FlatButton(
+              child: Text(
+                'Submit',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () {},
+              color: boxGrad.colors[1],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+              ),
             ),
           ),
         ],
