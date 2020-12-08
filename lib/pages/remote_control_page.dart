@@ -15,6 +15,36 @@ class RemoteControlPage extends StatelessWidget {
           ),
         ),
         backgroundColor: boxGrad.colors[1],
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.info_outline,
+              color: Colors.grey[400],
+            ),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  child: AlertDialog(
+                    title: Text('Buttons guide'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('Double tap a button to assign a value.'),
+                        Text('Tap and hold a button to delete a value.'),
+                      ],
+                    ),
+                    actions: [
+                      FlatButton(
+                        child: Text('Dismiss'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  ));
+            },
+          ),
+        ],
       ),
       backgroundColor: scaffoldBgColor,
       body: true

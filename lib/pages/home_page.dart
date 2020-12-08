@@ -1,10 +1,12 @@
 import 'package:embesys_ctrl/constants.dart';
 import 'package:embesys_ctrl/pages/other_devices_page.dart';
+import 'package:embesys_ctrl/pages/remote_control_page.dart';
 import 'package:embesys_ctrl/pages/temperature_reading_page.dart';
 import 'package:embesys_ctrl/providers/weather_provider.dart';
 import 'package:embesys_ctrl/widgets/device_notifications_widget.dart';
 import 'package:embesys_ctrl/widgets/other_devices_buttons_widget.dart';
 import 'package:embesys_ctrl/widgets/page_list_widget.dart';
+import 'package:embesys_ctrl/widgets/remote_control_list.dart';
 import 'package:embesys_ctrl/widgets/rooms_pages_widget.dart';
 import 'package:embesys_ctrl/widgets/sound_widget.dart';
 import 'package:embesys_ctrl/widgets/temperature_reading_widget.dart';
@@ -110,6 +112,34 @@ class HomePage extends StatelessWidget {
               OtherDevicesButtonsWidget(),
               SizedBox(
                 height: 24,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: FlatButton(
+                      child: Text('Remote Page'),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RemoteControlPage(),
+                            ));
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: FlatButton(
+                      child: Text('Remote List'),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RemoteControlList(),
+                            ));
+                      },
+                    ),
+                  )
+                ],
               ),
             ],
           ),
