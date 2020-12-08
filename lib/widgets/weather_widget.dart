@@ -17,11 +17,6 @@ class _WeatherWidgetState extends State<WeatherWidget> {
   @override
   Widget build(BuildContext context) {
     final weatherProvider = Provider.of<WeatherProvider>(context);
-    // if (weatherProvider.busy) {
-    //   return Center(
-    //     child: CircularProgressIndicator(),
-    //   );
-    // }
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -39,7 +34,30 @@ class _WeatherWidgetState extends State<WeatherWidget> {
         ),
       ),
       child: weatherProvider.model == null
-          ? Container()
+          ? Container(
+              height: 150,
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+              child: Column(
+                children: [
+                  Container(
+                    height: 30,
+                    width: double.infinity,
+                    color: Colors.grey[350],
+                    margin: EdgeInsets.only(left: 24),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 30,
+                    width: double.infinity,
+                    color: Colors.grey[350],
+                    margin: EdgeInsets.only(left: 56),
+                  ),
+                ],
+              ),
+            )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
