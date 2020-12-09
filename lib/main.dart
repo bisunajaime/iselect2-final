@@ -6,6 +6,7 @@ import 'package:embesys_ctrl/pages/home_page.dart';
 import 'package:embesys_ctrl/pages/login_page.dart';
 import 'package:embesys_ctrl/providers/login_provider.dart';
 import 'package:embesys_ctrl/providers/room_provider.dart';
+import 'package:embesys_ctrl/providers/temperature_reading_provider.dart';
 import 'package:embesys_ctrl/providers/weather_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

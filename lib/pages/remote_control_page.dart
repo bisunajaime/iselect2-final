@@ -19,7 +19,7 @@ class RemoteControlPage extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.info_outline,
-              color: Colors.grey[400],
+              color: Colors.white,
             ),
             onPressed: () {
               showDialog(

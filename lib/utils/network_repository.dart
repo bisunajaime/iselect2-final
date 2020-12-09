@@ -119,4 +119,20 @@ class NetworkRepository {
       };
     }
   }
+
+  Future<Map> loadDhtReadings() async {
+    try {
+      http.Response response = await _client.get('$_baseUrl/dht/retrieve');
+      if (response.statusCode != 200) {
+        throw Exception('There was a problem. ${response.statusCode}');
+      }
+      final body = jsonDecode(response.body);
+      return {
+        'type': 'success',
+        'message': body,
+      };
+    } catch (e) {
+      return {'type': 'error', 'message': e.toString()};
+    }
+  }
 }
