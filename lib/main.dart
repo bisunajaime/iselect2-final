@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:embesys_ctrl/constants.dart';
 import 'package:embesys_ctrl/pages/home_page.dart';
+import 'package:embesys_ctrl/pages/login_page.dart';
+import 'package:embesys_ctrl/providers/login_provider.dart';
 import 'package:embesys_ctrl/providers/room_provider.dart';
 import 'package:embesys_ctrl/providers/weather_provider.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +35,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => RoomProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LoginProvider(),
         ),
       ],
       child: MaterialApp(
@@ -65,7 +70,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: MyHomePage(),
+        home: LoginPage(),
       ),
     );
   }

@@ -3,14 +3,17 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:embesys_ctrl/constants.dart';
+import 'package:embesys_ctrl/utils/storage_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class NetworkRepository {
   http.Client _client = new http.Client();
+  StorageRepository _storageRepository = StorageRepository();
   IOWebSocketChannel _channel;
-  String _baseUrl = "http://192.168.254.117";
+  // String _baseUrl = "http://192.168.254.117";
+  String _baseUrl = "http://192.168.254.108:8000/api";
   String _weatherStackBaseUrl = "http://api.weatherstack.com";
   String _socketUrl = "ws://192.168.254.117:81";
 
@@ -87,6 +90,32 @@ class NetworkRepository {
       return {
         'type': 'error',
         'error': e.toString(),
+      };
+    }
+  }
+
+  Future<Map> login({String username, String password, String deviceId}) async {
+    try {
+      http.Response response =
+          await _client.post('$_baseUrl/auth/login', body: {
+        'name': username,
+        'password': password,
+        'deviceId': deviceId,
+      });
+      final body = jsonDecode(response.body);
+      final token = body['access_token'];
+      _storageRepository.saveToken(token);
+      if (response.statusCode != 200) {
+        throw Exception('There was a problem. ${response.statusCode}');
+      }
+      return {
+        'type': 'success',
+        'message': body.toString(),
+      };
+    } catch (e) {
+      return {
+        'type': 'error',
+        'message': e.toString(),
       };
     }
   }
