@@ -37,6 +37,7 @@ dependencies:
   connectivity: ^2.0.1
   charts_flutter: ^0.9.0
   flutter_barcode_scanner: ^1.0.1
+  firebase_messaging: ^7.0.0
 
 
 
