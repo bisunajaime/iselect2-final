@@ -22,7 +22,8 @@ class _DevicesPageState extends State<DevicesPage> {
   StreamController<Map> _socketController = StreamController.broadcast();
   StreamController<List<DhtModel>> _dhtListStream =
       StreamController.broadcast();
-  StreamController<bool> _ledStatusStream = StreamController.broadcast();
+  StreamController<bool> _led1StatusStream = StreamController.broadcast();
+  StreamController<bool> _led2StatusStream = StreamController.broadcast();
   StreamController<String> _doorbellStream = StreamController.broadcast();
   StreamController<String> _irStream = StreamController.broadcast();
   List<DhtModel> _dhtReadings = [];
@@ -39,7 +40,7 @@ class _DevicesPageState extends State<DevicesPage> {
     super.dispose();
     channel.sink.close();
     _dhtListStream.close();
-    _ledStatusStream.close();
+    _led1StatusStream.close();
   }
 
   void initSocket() {
@@ -80,20 +81,22 @@ class _DevicesPageState extends State<DevicesPage> {
           case 'IR_RECEIVE':
             // insert to db or array IR Model, should be unique and editable
             break;
-          case 'LED_ON':
-            // update led state
-            _ledStatusStream.add(true);
-            break;
-          case 'LED_OFF':
-            _ledStatusStream.add(false);
-            break;
-          case 'LED_STATUS':
+          case 'LED1_STATUS':
             double status = double.parse(event.toString().split(':')[1]);
             print(status);
             if (status != 0) {
-              _ledStatusStream.add(false);
+              _led1StatusStream.add(false);
             } else {
-              _ledStatusStream.add(true);
+              _led1StatusStream.add(true);
+            }
+            break;
+          case 'LED2_STATUS':
+            double status = double.parse(event.toString().split(':')[1]);
+            print(status);
+            if (status != 0) {
+              _led2StatusStream.add(false);
+            } else {
+              _led2StatusStream.add(true);
             }
             break;
           case 'DOORBELL':
@@ -200,36 +203,42 @@ class _DevicesPageState extends State<DevicesPage> {
                   Text('Notifications'),
                   // * Remote Control List Button (Navigate to page) {Might make a db for this}
                   StreamBuilder<bool>(
-                    stream: _ledStatusStream.stream,
+                    stream: _led1StatusStream.stream,
                     // initialData: false,
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return Text('Loading');
                       }
-                      // return Slider(
-                      //   value: 0,
-                      //   onChanged: (value) {
-                      //     channel.sink.add(jsonEncode({
-                      //       'LED1': 255,
-                      //       'LED2': 255,
-                      //       'LED_STATE': value.toInt(),
-                      //     }));
-                      //   },
-                      //   max: 255,
-                      //   min: 0,
-                      // );
                       return SwitchListTile(
                         value: snapshot.data,
                         onChanged: (value) {
                           print(value);
-                          _ledStatusStream.add(value);
-                          channel.sink.add(jsonEncode({
-                            'LED1': 255,
-                            'LED2': 255,
-                            'LED_STATE': value ? 0 : 255
-                          }));
+                          _led1StatusStream.add(value);
+                          channel.sink.add(jsonEncode(
+                              {'TYPE': "LED1", 'LED1_STATE': value ? 0 : 255}));
                         },
-                        title: Text('LED State'),
+                        title: Text('LED1 State'),
+                        subtitle:
+                            Text('Tap to turn ${snapshot.data ? 'off' : 'on'}'),
+                      );
+                    },
+                  ),
+                  StreamBuilder<bool>(
+                    stream: _led2StatusStream.stream,
+                    // initialData: false,
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Text('Loading');
+                      }
+                      return SwitchListTile(
+                        value: snapshot.data,
+                        onChanged: (value) {
+                          print(value);
+                          _led2StatusStream.add(value);
+                          channel.sink.add(jsonEncode(
+                              {'TYPE': "LED2", 'LED2_STATE': value ? 0 : 255}));
+                        },
+                        title: Text('LED2 State'),
                         subtitle:
                             Text('Tap to turn ${snapshot.data ? 'off' : 'on'}'),
                       );
