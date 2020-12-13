@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-class AvailableControlsPage extends StatelessWidget {
+class OnboardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      // body: ,
+      body: Center(
+        child: Text('Onboarding'),
+      ),
     );
   }
 }
