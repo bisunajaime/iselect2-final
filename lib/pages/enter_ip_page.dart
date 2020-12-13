@@ -11,6 +11,7 @@ class EnterIPPage extends StatefulWidget {
 
 class _EnterIPPageState extends State<EnterIPPage> {
   TextEditingController _ipController = TextEditingController();
+  SwiperController _controller = SwiperController();
   final _formKey = GlobalKey<FormState>();
   List<Map<String, dynamic>> _carouselItems = [
     {
@@ -76,8 +77,37 @@ class _EnterIPPageState extends State<EnterIPPage> {
                   height: 300,
                   width: double.infinity,
                   child: Swiper(
+                    controller: _controller,
                     scrollDirection: Axis.horizontal,
                     itemCount: _carouselItems.length,
+                    // pagination: SwiperPagination(
+                    //   alignment: Alignment.bottomCenter,
+                    //   builder: SwiperCustomPagination(
+                    //     builder:
+                    //         (BuildContext context, SwiperPluginConfig config) {
+                    //       return Row(
+                    //         crossAxisAlignment: CrossAxisAlignment.center,
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: List.generate(
+                    //           config.itemCount,
+                    //           (index) => Padding(
+                    //             padding: const EdgeInsets.only(
+                    //               left: 2.5,
+                    //               right: 2.5,
+                    //               top: 10,
+                    //             ),
+                    //             child: CircleAvatar(
+                    //               backgroundColor: config.activeIndex == index
+                    //                   ? Colors.blueAccent
+                    //                   : Colors.grey,
+                    //               radius: config.activeIndex == index ? 3 : 2.5,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       );
+                    //     },
+                    //   ),
+                    // ),
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(

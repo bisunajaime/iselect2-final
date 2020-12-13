@@ -104,8 +104,16 @@ class _DevicesPageState extends State<DevicesPage> {
               _doorbellStream.add("");
             }
             break;
+          case 'LDR_VAL':
+            String response = event.toString().split(':')[1];
+            print('$event : $response');
+            break;
+          case 'IR_VAL':
+            String response = event.toString().split(':')[1];
+            print("$event : $response");
+            break;
           default:
-            log(event);
+            print('$event : DEFAULT');
             break;
         }
       },
