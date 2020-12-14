@@ -36,6 +36,7 @@ dependencies:
   provider: ^4.3.2+3
   shared_preferences: ^0.5.12+4
   timeago: ^2.0.27
+  speech_to_text: ^3.0.0
 
 
 dev_dependencies:

@@ -16,6 +16,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class DevicesPage extends StatefulWidget {
   final String socketUrl;
@@ -33,6 +34,7 @@ class _DevicesPageState extends State<DevicesPage> {
   StreamController<bool> _led1StatusStream = StreamController.broadcast();
   StreamController<bool> _led2StatusStream = StreamController.broadcast();
   StreamController<String> _doorbellStream = StreamController.broadcast();
+  StreamController<bool> _speechStream = StreamController.broadcast();
   StreamController<String> _irStream = StreamController.broadcast();
   List<DhtModel> _dhtReadings = [];
 
@@ -661,6 +663,105 @@ class _DevicesPageState extends State<DevicesPage> {
                                 ),
                               ),
                             );
+                          },
+                        ),
+                      ),
+                    ),
+                    StreamBuilder(
+                      stream: _speechStream.stream,
+                      initialData: false,
+                      builder: (context, snapshot) {
+                        if (snapshot.data) {
+                          return Container(
+                            child: Center(
+                                child: Text('Listening for 10 seconds...')),
+                          );
+                        }
+                        return Container();
+                      },
+                    ),
+                    SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 45,
+                        child: FlatButton.icon(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          icon: Icon(
+                            Icons.keyboard_voice,
+                            color: Colors.black,
+                          ),
+                          label: Text(
+                            'Voice Control',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                          color: UiColors.lightTextColor,
+                          onPressed: () async {
+                            stt.SpeechToText speech = stt.SpeechToText();
+                            bool available = await speech.initialize(
+                              onStatus: (status) {
+                                print(status);
+                              },
+                              onError: (errorNotification) {
+                                print(errorNotification.errorMsg);
+                              },
+                            );
+                            if (available) {
+                              speech.listen(
+                                listenFor: Duration(seconds: 10),
+                                onResult: (result) {
+                                  _speechStream.add(true);
+                                  print(result.recognizedWords);
+                                  if (result.recognizedWords.contains('led')) {
+                                    if (result.recognizedWords
+                                        .contains('one')) {
+                                      if (result.recognizedWords
+                                          .contains('on')) {
+                                        _led1StatusStream.add(true);
+                                        channel.sink.add(jsonEncode(
+                                            {'TYPE': "LED1", 'LED1_STATE': 0}));
+                                      } else {
+                                        _led1StatusStream.add(false);
+                                        channel.sink.add(jsonEncode({
+                                          'TYPE': "LED1",
+                                          'LED1_STATE': 255
+                                        }));
+                                      }
+                                    }
+                                    if (result.recognizedWords.contains('to')) {
+                                      if (result.recognizedWords
+                                          .contains('on')) {
+                                        _led2StatusStream.add(true);
+                                        channel.sink.add(jsonEncode(
+                                            {'TYPE': "LED2", 'LED2_STATE': 0}));
+                                      } else {
+                                        _led2StatusStream.add(false);
+                                        channel.sink.add(jsonEncode({
+                                          'TYPE': "LED2",
+                                          'LED2_STATE': 255
+                                        }));
+                                      }
+                                    }
+                                  }
+                                },
+                              );
+                            } else {
+                              print(
+                                  "The user has denied the use of speech recognition.");
+                            }
+                            speech.stop();
+                            Timer(Duration(seconds: 10), () {
+                              _speechStream.add(false);
+                            });
                           },
                         ),
                       ),
