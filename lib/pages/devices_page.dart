@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:math' as math;
 
+import 'package:embesys_finals/models/categories_model.dart';
 import 'package:embesys_finals/models/dht_model.dart';
 import 'package:embesys_finals/models/ir_model.dart';
 import 'package:embesys_finals/models/notification_model.dart';
@@ -322,7 +323,6 @@ class _DevicesPageState extends State<DevicesPage> {
                         ),
                       ),
                     ),
-                    // * Remote Control List Button (Navigate to page) {Might make a db for this}
                     StreamBuilder<bool>(
                       stream: _led1StatusStream.stream,
                       // initialData: false,
@@ -382,6 +382,245 @@ class _DevicesPageState extends State<DevicesPage> {
                           title: Text('LED2 State'),
                           subtitle: Text(
                               'Tap to turn ${snapshot.data ? 'off' : 'on'}'),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Remote Categories',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          Consumer<IRListProvider>(
+                            builder: (context, value, child) {
+                              return GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      TextEditingController _categoryName =
+                                          TextEditingController();
+                                      final _key = GlobalKey<FormState>();
+                                      return AlertDialog(
+                                        title: Text('Create new category.'),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Form(
+                                              key: _key,
+                                              child: TextFormField(
+                                                controller: _categoryName,
+                                                validator: (value) {
+                                                  if (value
+                                                          .replaceAll(' ', '')
+                                                          .trim()
+                                                          .length ==
+                                                      0) {
+                                                    return "Required field";
+                                                  }
+                                                  return null;
+                                                },
+                                                decoration: InputDecoration(
+                                                    filled: true,
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                      borderSide:
+                                                          BorderSide.none,
+                                                    ),
+                                                    hintText: 'Type here...'),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        actions: [
+                                          FlatButton(
+                                            child: Text('Dismiss'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                          FlatButton(
+                                            child: Text('Submit'),
+                                            onPressed: () {
+                                              value.addCategory(
+                                                  new CategoriesModel(
+                                                buttonCount: 0,
+                                                name: _categoryName.text,
+                                              ));
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Text(
+                                  'Add category',
+                                  style: TextStyle(
+                                    color: UiColors.lightTextColor,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Consumer<IRListProvider>(
+                      builder: (context, value, child) {
+                        return Container(
+                          width: double.infinity,
+                          height: 80,
+                          child: value.categories.length == 0
+                              ? GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        TextEditingController _categoryName =
+                                            TextEditingController();
+                                        final _key = GlobalKey<FormState>();
+                                        return AlertDialog(
+                                          title: Text('Create new category.'),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Form(
+                                                key: _key,
+                                                child: TextFormField(
+                                                  controller: _categoryName,
+                                                  validator: (value) {
+                                                    if (value
+                                                            .replaceAll(' ', '')
+                                                            .trim()
+                                                            .length ==
+                                                        0) {
+                                                      return "Required field";
+                                                    }
+                                                    return null;
+                                                  },
+                                                  decoration: InputDecoration(
+                                                      filled: true,
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        borderSide:
+                                                            BorderSide.none,
+                                                      ),
+                                                      hintText: 'Type here...'),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          actions: [
+                                            FlatButton(
+                                              child: Text('Dismiss'),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            FlatButton(
+                                              child: Text('Submit'),
+                                              onPressed: () {
+                                                value.addCategory(
+                                                    new CategoriesModel(
+                                                  buttonCount: 0,
+                                                  name: _categoryName.text,
+                                                ));
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: UiColors.secondaryColor,
+                                      borderRadius: BorderRadius.circular(5),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 10,
+                                          color: Colors.black.withOpacity(.15),
+                                          offset: Offset(0, 1),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'No categories yet. Tap here to add.',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: value.categories.length,
+                                  itemBuilder: (context, index) {
+                                    CategoriesModel model =
+                                        value.categories[index];
+                                    return Container(
+                                      height: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: UiColors.secondaryColor,
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 8,
+                                      ),
+                                      margin: EdgeInsets.only(
+                                          left: 8, right: 8, top: 8, bottom: 8),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            model.name ?? "None",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Count: ${model.buttonCount}',
+                                            style: TextStyle(
+                                              color:
+                                                  Colors.white.withOpacity(.5),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
                         );
                       },
                     ),
