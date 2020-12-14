@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:embesys_finals/models/ir_model.dart';
 import 'package:embesys_finals/pages/edit_remote_page.dart';
 import 'package:embesys_finals/provider/ir_list_provider.dart';
@@ -6,8 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:web_socket_channel/io.dart';
 
 class RemoteButtonsPage extends StatelessWidget {
+  final IOWebSocketChannel channel;
+
+  const RemoteButtonsPage({Key key, @required this.channel}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +97,10 @@ class RemoteButtonsPage extends StatelessWidget {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                // send channel signal
+                                channel.sink.add(jsonEncode({
+                                  'TYPE': 'IR_SEND',
+                                  'CODE': int.parse(model.value, radix: 16),
+                                }));
                               },
                               onLongPress: () {
                                 Navigator.push(
@@ -102,17 +112,24 @@ class RemoteButtonsPage extends StatelessWidget {
                                     ));
                               },
                               onDoubleTap: () {
-                                value.deleteIRData(index);
                                 showDialog(
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      title: Text("Deleted"),
-                                      content: Text('Button has been deleted.'),
+                                      title: Text("Are you sure?"),
+                                      content: Text(
+                                          'Are you sure you want to delete this button?'),
                                       actions: [
                                         FlatButton(
                                           child: Text('Dismiss'),
                                           onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                        FlatButton(
+                                          child: Text('Confirm'),
+                                          onPressed: () {
+                                            value.deleteIRData(index);
                                             Navigator.pop(context);
                                           },
                                         )

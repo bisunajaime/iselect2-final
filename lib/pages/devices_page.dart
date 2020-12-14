@@ -590,6 +590,7 @@ class _DevicesPageState extends State<DevicesPage> {
                                       height: double.infinity,
                                       decoration: BoxDecoration(
                                         color: UiColors.secondaryColor,
+                                        borderRadius: BorderRadius.circular(5),
                                       ),
                                       padding: EdgeInsets.symmetric(
                                         horizontal: 16,
@@ -655,7 +656,9 @@ class _DevicesPageState extends State<DevicesPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => RemoteButtonsPage(),
+                                builder: (context) => RemoteButtonsPage(
+                                  channel: channel,
+                                ),
                               ),
                             );
                           },

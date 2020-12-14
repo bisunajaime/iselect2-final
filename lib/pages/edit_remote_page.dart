@@ -105,6 +105,7 @@ class _EditRemotePageState extends State<EditRemotePage> {
                       prevIndex,
                     );
                     print('updated');
+                    Navigator.pop(context);
                   },
                 ),
               ),
