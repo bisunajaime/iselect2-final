@@ -4,9 +4,15 @@ import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:embesys_finals/models/dht_model.dart';
+import 'package:embesys_finals/models/ir_model.dart';
+import 'package:embesys_finals/models/notification_model.dart';
+import 'package:embesys_finals/pages/remote_buttons_page.dart';
+import 'package:embesys_finals/provider/ir_list_provider.dart';
+import 'package:embesys_finals/provider/notification_provider.dart';
 import 'package:embesys_finals/ui/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:web_socket_channel/io.dart';
 
@@ -42,17 +48,25 @@ class _DevicesPageState extends State<DevicesPage> {
     channel.sink.close();
     _dhtListStream.close();
     _led1StatusStream.close();
+    _led2StatusStream.close();
+    _doorbellStream.close();
   }
 
   void initSocket() {
     channel = IOWebSocketChannel.connect("ws://${widget.socketUrl}:81");
     channel.stream.listen(
       (event) {
-        // TODO: Switch case based on event type
         log(event);
         String type = event.toString().split(':')[0].toUpperCase();
         // * type format TYPE:RESULT
         log(type);
+        // ! Notifications
+        // Provider.of<NotificationProvider>(context, listen: false)
+        //     .addNotif(new NotificationModel(
+        //       type: type,
+        //       action: "",
+        //       timeStamp: DateTime.now(),
+        //     ));
         switch (type) {
           case 'DHT':
             // add to list, max of 15
@@ -79,8 +93,17 @@ class _DevicesPageState extends State<DevicesPage> {
             // Doorbell push notif
             _doorbellStream.add('Ring');
             break;
-          case 'IR_RECEIVE':
-            // insert to db or array IR Model, should be unique and editable
+          case 'IR_VAL':
+            // * Recv ir
+            String response = event.toString().split(':')[1];
+            print("IRVAL: $response");
+            Provider.of<IRListProvider>(context, listen: false)
+                .addIRData(new IRModel(
+              label: null,
+              value: response,
+              category: null,
+              dateAdded: DateTime.now(),
+            ));
             break;
           case 'LED1_STATUS':
             double status = double.parse(event.toString().split(':')[1]);
@@ -289,14 +312,31 @@ class _DevicesPageState extends State<DevicesPage> {
                         ],
                       ),
                     ),
-                    Text('Notifications'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      child: Text(
+                        'LED Controls',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
                     // * Remote Control List Button (Navigate to page) {Might make a db for this}
                     StreamBuilder<bool>(
                       stream: _led1StatusStream.stream,
                       // initialData: false,
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
-                          return Text('Loading');
+                          return Card(
+                            margin: EdgeInsets.only(
+                                left: 16, right: 16, bottom: 8, top: 8),
+                            color: UiColors.secondaryColor,
+                            child: ListTile(
+                              title: Text('Loading'),
+                              leading: CircularProgressIndicator(),
+                            ),
+                          );
                         }
                         return SwitchListTile(
                           value: snapshot.data,
@@ -319,7 +359,15 @@ class _DevicesPageState extends State<DevicesPage> {
                       // initialData: false,
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
-                          return Text('Loading');
+                          return Card(
+                            margin:
+                                EdgeInsets.only(left: 16, right: 16, bottom: 8),
+                            color: UiColors.secondaryColor,
+                            child: ListTile(
+                              title: Text('Loading'),
+                              leading: CircularProgressIndicator(),
+                            ),
+                          );
                         }
                         return SwitchListTile(
                           value: snapshot.data,
@@ -337,7 +385,44 @@ class _DevicesPageState extends State<DevicesPage> {
                         );
                       },
                     ),
-                    // ! Lights Widget
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 45,
+                        child: FlatButton.icon(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          icon: Icon(
+                            Icons.settings_remote,
+                            color: Colors.black,
+                          ),
+                          label: Text(
+                            'View Remote',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
+                          color: UiColors.lightTextColor,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RemoteButtonsPage(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -364,7 +449,7 @@ class _DevicesPageState extends State<DevicesPage> {
                   ),
                 );
               },
-            )
+            ),
           ],
         ),
       ),

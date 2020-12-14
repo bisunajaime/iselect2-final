@@ -7,12 +7,16 @@ class IRListProvider extends ChangeNotifier {
   List<IRModel> get irRecvList => _irRecvList;
 
   addIRData(IRModel val) {
-    IRModel hasDuplicate =
-        _irRecvList.where((element) => element.value != val.value).toList()[0];
-    print(hasDuplicate);
-    // ...
-    // _irRecvList.add(val);
-    notifyListeners();
+    if (val.value == "ffffffff") {
+      return;
+    }
+    Iterable<IRModel> hasDuplicate =
+        _irRecvList.where((element) => element.value == val.value);
+    if (hasDuplicate.toList().length == 0) {
+      _irRecvList.add(val);
+      notifyListeners();
+    }
+    print("LEN: ${_irRecvList.length}");
   }
 
   deleteIRData(int index) {

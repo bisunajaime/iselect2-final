@@ -1,5 +1,6 @@
 import 'package:embesys_finals/pages/devices_page.dart';
 import 'package:embesys_finals/provider/ir_list_provider.dart';
+import 'package:embesys_finals/provider/notification_provider.dart';
 import 'package:embesys_finals/ui/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -226,15 +227,8 @@ class _EnterIPPageState extends State<EnterIPPage> {
                             Navigator.push(
                                 context,
                                 PageRouteBuilder(
-                                  pageBuilder: (_, __, ___) => MultiProvider(
-                                    providers: [
-                                      ChangeNotifierProvider(
-                                        create: (context) => IRListProvider(),
-                                      ),
-                                    ],
-                                    child: DevicesPage(
-                                      socketUrl: _ipController.text,
-                                    ),
+                                  pageBuilder: (_, __, ___) => DevicesPage(
+                                    socketUrl: _ipController.text,
                                   ),
                                 ));
                             return;

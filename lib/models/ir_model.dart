@@ -1,6 +1,6 @@
 class IRModel {
-  String label, value;
+  String label, value, category;
   DateTime dateAdded;
 
-  IRModel({this.label, this.value, this.dateAdded});
+  IRModel({this.label, this.value, this.dateAdded, this.category});
 }
