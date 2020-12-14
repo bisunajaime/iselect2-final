@@ -661,7 +661,10 @@ class _DevicesPageState extends State<DevicesPage> {
                           },
                         ),
                       ),
-                    )
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
                   ],
                 ),
               ),

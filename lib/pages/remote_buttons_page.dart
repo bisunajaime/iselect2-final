@@ -1,4 +1,5 @@
 import 'package:embesys_finals/models/ir_model.dart';
+import 'package:embesys_finals/pages/edit_remote_page.dart';
 import 'package:embesys_finals/provider/ir_list_provider.dart';
 import 'package:embesys_finals/ui/colors.dart';
 import 'package:flutter/material.dart';
@@ -87,65 +88,99 @@ class RemoteButtonsPage extends StatelessWidget {
                             width: 8,
                           ),
                           Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: UiColors.secondaryColor,
-                                borderRadius: BorderRadius.circular(5),
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 5,
-                                    color: Colors.black.withOpacity(.15),
-                                    offset: Offset(0, 1),
-                                  ),
-                                ],
-                              ),
-                              padding: EdgeInsets.all(8),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                      "Label: ${model.label ?? "Tap and hold to edit."}"),
-                                  Divider(),
-                                  Text(
-                                    "HEX_VAL: ${model.value}",
-                                    style: TextStyle(
-                                      color: Colors.white.withOpacity(.5),
-                                      fontSize: 14,
+                            child: GestureDetector(
+                              onTap: () {
+                                // send channel signal
+                              },
+                              onLongPress: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditRemotePage(
+                                        index: index,
+                                      ),
+                                    ));
+                              },
+                              onDoubleTap: () {
+                                value.deleteIRData(index);
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text("Deleted"),
+                                      content: Text('Button has been deleted.'),
+                                      actions: [
+                                        FlatButton(
+                                          child: Text('Dismiss'),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        )
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: UiColors.secondaryColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 5,
+                                      color: Colors.black.withOpacity(.15),
+                                      offset: Offset(0, 1),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    "Category: ${model.category ?? "Edit to add a category"}",
-                                    style: TextStyle(
-                                      color: Colors.white.withOpacity(.5),
-                                      fontSize: 14,
+                                  ],
+                                ),
+                                padding: EdgeInsets.all(8),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        "${model.label ?? "Tap and hold to edit."}"),
+                                    Divider(),
+                                    Text(
+                                      "HEX_VAL: ${model.value}",
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(.5),
+                                        fontSize: 14,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 14,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        "${timeago.format(model.dateAdded)}",
-                                        style: TextStyle(
-                                          color: Colors.white.withOpacity(.5),
-                                          fontSize: 12,
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      "Category: ${model.category ?? "Edit to add a category"}",
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(.5),
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 14,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          "${timeago.format(model.dateAdded)}",
+                                          style: TextStyle(
+                                            color: Colors.white.withOpacity(.5),
+                                            fontSize: 12,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: 2,
-                                      ),
-                                      Icon(
-                                        Icons.access_time,
-                                        size: 15,
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        Icon(
+                                          Icons.access_time,
+                                          size: 15,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

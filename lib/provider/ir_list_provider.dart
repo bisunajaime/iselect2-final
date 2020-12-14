@@ -35,13 +35,20 @@ class IRListProvider extends ChangeNotifier {
   }
 
   deleteIRData(int index) {
+    IRModel toBeDeleted = _irRecvList[index];
+    Iterable<CategoriesModel> found =
+        _categories.where((element) => element.name == toBeDeleted.category);
+    if (found.toList().length != 0) {
+      found.toList()[0].buttonCount--;
+    }
     _irRecvList.removeAt(index);
+
     notifyListeners();
   }
 
   updateLabel(
       int index, String label, int categoryIndex, int prevCategoryIndex) {
-    if (categoryIndex == null || label == null) return;
+    if (label == null) return;
     IRModel val = _irRecvList[index];
     if (val.category != null) {
       if (val.category == _categories[categoryIndex].name) {
