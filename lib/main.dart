@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:embesys_finals/pages/enter_ip_page.dart';
+import 'package:embesys_finals/pages/linux/linux_enter_ip_page.dart';
 import 'package:embesys_finals/provider/ir_list_provider.dart';
 import 'package:embesys_finals/provider/notification_provider.dart';
 import 'package:embesys_finals/ui/colors.dart';
@@ -16,6 +19,15 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: UiColors.secondaryColor,
     ));
+
+    _buildPlatform() {
+      if (Platform.isLinux) {
+        return LinuxEnterIpPage();
+      } else {
+        return EnterIPPage();
+      }
+    }
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -33,7 +45,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: EnterIPPage(),
+        home: _buildPlatform(),
       ),
     );
   }
