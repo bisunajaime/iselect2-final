@@ -28,7 +28,7 @@ It is required to have these installed in your development environment before be
 To run the project follow these steps:
 
 1. Clone the project
-    * `git clone giturl`
+    * `git clone https://github.com/jose-bamboo/ctrl-embesys`
 2. After cloning the project. Install dependencies by running this command in your project directory terminal
     * `flutter pub pub get`
 3. To run the project on your mobile device enter this in the terminal.
